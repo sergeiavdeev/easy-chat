@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+
+<MenuBar xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.avdeev.chat.client.MenuController">
+    <Menu text="File">
+        <MenuItem onAction="#connectServer" text="Connect"/>
+        <MenuItem onAction="#disconnectServer" text="Disconnect"/>
+        <MenuItem onAction="#mockAction" text="Item3"/>
+        <MenuItem onAction="#mockAction" text="Item4"/>
+        <MenuItem onAction="#mockAction" text="Item5"/>
+        <MenuItem onAction="#exit" text="Exit"/>
+    </Menu>
+    <Menu text="Edit">
+        <MenuItem onAction="#mockAction" text="Item1"/>
+        <MenuItem onAction="#mockAction" text="Item2"/>
+        <MenuItem onAction="#mockAction" text="Item3"/>
+        <MenuItem onAction="#mockAction" text="Item4"/>
+        <MenuItem onAction="#mockAction" text="Item5"/>
+        <MenuItem onAction="#mockAction" text="Item6"/>
+    </Menu>
+    <Menu text="View">
+        <MenuItem onAction="#mockAction" text="Item1"/>
+        <MenuItem onAction="#mockAction" text="Item2"/>
+        <MenuItem onAction="#mockAction" text="Item3"/>
+        <MenuItem onAction="#mockAction" text="Item4"/>
+        <MenuItem onAction="#mockAction" text="Item5"/>
+        <MenuItem onAction="#mockAction" text="Item6"/>
+    </Menu>
+    <Menu text="Help">
+        <MenuItem onAction="#mockAction" text="Item1"/>
+        <MenuItem onAction="#mockAction" text="Item2"/>
+        <MenuItem onAction="#mockAction" text="Item3"/>
+        <MenuItem onAction="#mockAction" text="Item4"/>
+        <MenuItem onAction="#showHelp" text="Help"/>
+        <MenuItem onAction="#showAbout" text="About"/>
+    </Menu>
+</MenuBar>

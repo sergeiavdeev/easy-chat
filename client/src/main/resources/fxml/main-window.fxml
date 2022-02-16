@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.avdeev.chat.client.MainController" stylesheets="@../css/main.css">
+   <fx:include source="login-panel.fxml" visible="true" />
+   <VBox fx:id="chatPanel" prefHeight="400.0" prefWidth="600.0" visible="false" AnchorPane.bottomAnchor="0.0"
+         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <fx:include source="main-menu.fxml" />
+      <SplitPane dividerPositions="0.35" stylesheets="@../css/main.css" VBox.vgrow="ALWAYS">
+         <AnchorPane minWidth="100">
+            <ListView fx:id="contactList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+         </AnchorPane>
+         <AnchorPane minWidth="100">
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0">
+               <TextArea fx:id="chatArea" editable="false" VBox.vgrow="ALWAYS"/>
+               <HBox VBox.vgrow="NEVER">
+                  <TextField fx:id="messageField" minHeight="40" onAction="#sendMessage" promptText="You message"
+                             HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="btnSend" minHeight="40" onAction="#sendMessage" text="Send"/>
+               </HBox>
+            </VBox>
+         </AnchorPane>
+      </SplitPane>
+   </VBox>
+</AnchorPane>

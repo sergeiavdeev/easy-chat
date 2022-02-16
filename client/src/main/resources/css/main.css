@@ -1,0 +1,18 @@
+.menu-bar {
+    -fx-border-width: 0;
+    -fx-background-color: #fff;
+}
+
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 0 0 0;
+}
+
+.button {
+    -fx-border-width: 0;
+    -fx-background-color: #fff;
+}
+
+.button:hover {
+    -fx-background-color: rgb(0, 150, 201);
+    -fx-text-fill: #fff;
+}

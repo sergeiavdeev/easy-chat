@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="loginPanel" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0"
+      AnchorPane.topAnchor="150.0" fx:controller="ru.avdeev.chat.client.LoginController">
+    <Label text="Login: "/>
+    <TextField fx:id="loginField">
+        <VBox.margin>
+            <Insets bottom="15.0"/>
+        </VBox.margin>
+    </TextField>
+    <Label text="Password: "/>
+    <PasswordField fx:id="passwordField">
+        <VBox.margin>
+            <Insets bottom="15.0"/>
+        </VBox.margin>
+    </PasswordField>
+    <VBox alignment="CENTER">
+        <Button alignment="CENTER" contentDisplay="CENTER" defaultButton="true" onAction="#sendAuth" text="connect"/>
+    </VBox>
+</VBox>
