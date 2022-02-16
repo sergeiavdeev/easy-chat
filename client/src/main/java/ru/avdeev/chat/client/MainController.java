@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable, MessageProcessor {
 
     private NetworkService networkService;
-    private User user;
+    //private User user;
     private final ObservableSet<User> contacts = FXCollections.observableSet();
 
     @FXML
@@ -53,11 +53,10 @@ public class MainController implements Initializable, MessageProcessor {
 
         User contact = contactList.getSelectionModel().getSelectedItem();
         if (contact == null || contact.getId() == 0) {
-            //networkService.sendMessage(Helper.createMessage("/broadcast", message, ""));
             networkService.sendMessage(new Message(MessageType.SEND_ALL, new String[]{message}));
         } else {
-            //networkService.sendMessage(Helper.createMessage("/private", contact, message));
             networkService.sendMessage(new Message(MessageType.SEND_PRIVATE, new String[]{contact.getIdString(), message}));
+            User user = networkService.getUser();
             chatArea.appendText(user.getName() + ": " + message + System.lineSeparator());
         }
 
@@ -71,7 +70,7 @@ public class MainController implements Initializable, MessageProcessor {
 
         contacts.addListener((Change<? extends User> change) -> {
             if (change.wasAdded()) {
-                if (!change.getElementAdded().equals(user))
+                if (!change.getElementAdded().equals(networkService.getUser()))
                     contactList.getItems().add(change.getElementAdded());
             }
             if (change.wasRemoved()) {
@@ -97,7 +96,8 @@ public class MainController implements Initializable, MessageProcessor {
         Message inMessage = new Message(message);
         switch (inMessage.getType()) {
             case RESPONSE_AUTH_OK:
-                user = new User(Integer.parseInt(inMessage.getParams().get(0)), inMessage.getParams().get(1));
+                User user = new User(Integer.parseInt(inMessage.getParams().get(0)), inMessage.getParams().get(1));
+                networkService.setUser(user);
                 chatPanel.setVisible(true);
                 ChatApplication.getStage().setTitle("Easy Chat - " + user.getName());
                 break;
@@ -111,6 +111,23 @@ public class MainController implements Initializable, MessageProcessor {
             case USER_OFFLINE:
                 contacts.remove(new User(Integer.parseInt(inMessage.getParams().get(0)), inMessage.getParams().get(1)));
                 break;
+            case RESPONSE_USER_NAME_CHANGE_OK:
+                changeUserName(new User(Integer.parseInt(inMessage.getParams().get(0)), inMessage.getParams().get(1)));
+                break;
+        }
+    }
+
+    private void changeUserName(User user) {
+        for (User contact : contacts) {
+            if (contact.equals(user)) {
+                contacts.remove(contact);
+                contacts.add(user);
+                break;
+            }
+        }
+
+        if (networkService.getUser().equals(user)) {
+            ChatApplication.getStage().setTitle("Easy Chat - " + user.getName());
         }
     }
 }

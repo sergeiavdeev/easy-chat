@@ -106,6 +106,12 @@ public class ClientHandler {
                         inMessage.getParams().get(1)
                 );
                 break;
+            case REQUEST_USER_NAME_CHANGE:
+                server.changeUserName(user.getId(), inMessage.getParams().get(1));
+                break;
+            case REQUEST_USER_PASSWORD_CHANGE:
+                server.changeUserPassword(user.getId(), inMessage.getParams().get(2));
+                break;
             default:
                 break;
         }
