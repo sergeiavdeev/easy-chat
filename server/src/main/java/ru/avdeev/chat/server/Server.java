@@ -84,6 +84,15 @@ public class Server {
         }
     }
 
+    public void changeUserName(int userId, String name) {
+        userService.changeName(userId, name);
+        sendChangeUserNameOk(userId, name);
+    }
+
+    public void changeUserPassword(int userId, String password) {
+        userService.setPassword(userId, password);
+    }
+
     private void sendUserOffline(User user) {
         for (ClientHandler clientHandler : clients) {
             clientHandler.send(
@@ -100,5 +109,17 @@ public class Server {
             }
         }
         return false;
+    }
+
+    private void sendChangeUserNameOk(int userId, String name) {
+        for (ClientHandler clientHandler : clients) {
+            clientHandler.send(
+                    new Message(MessageType.RESPONSE_USER_NAME_CHANGE_OK,
+                            new String[]{String.valueOf(userId), name})
+            );
+            if (clientHandler.getUser().getId() == userId) {
+                clientHandler.getUser().setName(name);
+            }
+        }
     }
 }

@@ -3,7 +3,10 @@ package ru.avdeev.chat.server;
 import ru.avdeev.chat.commons.PropertyReader;
 import ru.avdeev.chat.commons.User;
 import ru.avdeev.chat.server.services.InMemoryUserService;
+import ru.avdeev.chat.server.services.SQLiteUserService;
 import ru.avdeev.chat.server.services.UserService;
+
+import java.sql.SQLException;
 
 public class Application {
 
@@ -14,11 +17,20 @@ public class Application {
         userService.addUser(new User("Иван"), "ivan", "456");
         userService.addUser(new User("Петя"), "petr", "789");
 
-        System.out.println(userService.auth("avdey", "123"));
+        UserService dbService;
+        try {
+            dbService = SQLiteUserService.create();
+            dbService.addUser(new User("Сергей"), "avdey", "123");
+            dbService.addUser(new User("Иван"), "ivan", "456");
+            dbService.addUser(new User("Петя"), "petr", "789");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
 
         new Server(
                 Integer.parseInt(PropertyReader.getInstance().get("port")),
-                userService
+                dbService
         ).start();
     }
 }

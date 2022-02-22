@@ -69,6 +69,24 @@ public class Message {
             case "/USER_OFFLINE":
                 type = MessageType.USER_OFFLINE;
                 break;
+            case "/REQUEST_USER_NAME_CHANGE":
+                type = MessageType.REQUEST_USER_NAME_CHANGE;
+                break;
+            case "/RESPONSE_USER_NAME_CHANGE_OK":
+                type = MessageType.RESPONSE_USER_NAME_CHANGE_OK;
+                break;
+            case "/RESPONSE_USER_NAME_CHANGE_ERROR":
+                type = MessageType.RESPONSE_USER_NAME_CHANGE_ERROR;
+                break;
+            case "/REQUEST_USER_PASSWORD_CHANGE":
+                type = MessageType.REQUEST_USER_PASSWORD_CHANGE;
+                break;
+            case "/RESPONSE_USER_PASSWORD_CHANGE_OK":
+                type = MessageType.RESPONSE_USER_PASSWORD_CHANGE_OK;
+                break;
+            case "/RESPONSE_USER_PASSWORD_CHANGE_ERROR":
+                type = MessageType.RESPONSE_USER_PASSWORD_CHANGE_ERROR;
+                break;
             default:
                 type = MessageType.UNDEFINED;
                 break;

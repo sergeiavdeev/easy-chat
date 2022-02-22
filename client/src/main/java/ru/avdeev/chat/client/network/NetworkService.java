@@ -2,6 +2,7 @@ package ru.avdeev.chat.client.network;
 
 import ru.avdeev.chat.commons.Message;
 import ru.avdeev.chat.commons.PropertyReader;
+import ru.avdeev.chat.commons.User;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -18,6 +19,7 @@ public class NetworkService {
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
     private final List<MessageProcessor> messageProcessor;
+    private User user;
 
     private static NetworkService instance;
 
@@ -92,5 +94,13 @@ public class NetworkService {
         for (MessageProcessor process : messageProcessor) {
             process.processMessage(message);
         }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

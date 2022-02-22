@@ -6,9 +6,7 @@
     <Menu text="File">
         <MenuItem onAction="#connectServer" text="Connect"/>
         <MenuItem onAction="#disconnectServer" text="Disconnect"/>
-        <MenuItem onAction="#mockAction" text="Item3"/>
-        <MenuItem onAction="#mockAction" text="Item4"/>
-        <MenuItem onAction="#mockAction" text="Item5"/>
+        <MenuItem onAction="#openSettings" text="Settings"/>
         <MenuItem onAction="#exit" text="Exit"/>
     </Menu>
     <Menu text="Edit">
