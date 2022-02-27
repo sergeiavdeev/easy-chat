@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class MainController implements Initializable, MessageProcessor {
 
     private NetworkService networkService;
-    //private User user;
+    private MessageLog messageLog;
     private final ObservableSet<User> contacts = FXCollections.observableSet();
 
     @FXML
@@ -57,7 +57,9 @@ public class MainController implements Initializable, MessageProcessor {
         } else {
             networkService.sendMessage(new Message(MessageType.SEND_PRIVATE, new String[]{contact.getIdString(), message}));
             User user = networkService.getUser();
-            chatArea.appendText(user.getName() + ": " + message + System.lineSeparator());
+            String msg = user.getName() + ": " + message + System.lineSeparator();
+            chatArea.appendText(msg);
+            messageLog.write(msg);
         }
 
         messageField.clear();
@@ -100,10 +102,14 @@ public class MainController implements Initializable, MessageProcessor {
                 networkService.setUser(user);
                 chatPanel.setVisible(true);
                 ChatApplication.getStage().setTitle("Easy Chat - " + user.getName());
+                messageLog = new MessageLog(user.getIdString() + ".txt");
+                loadHistory();
                 break;
             case SEND_ALL:
             case SEND_PRIVATE:
-                chatArea.appendText(inMessage.getParams().get(0) + ": " + inMessage.getParams().get(1) + System.lineSeparator());
+                String msg = inMessage.getParams().get(0) + ": " + inMessage.getParams().get(1) + System.lineSeparator();
+                chatArea.appendText(msg);
+                messageLog.write(msg);
                 break;
             case USER_ONLINE:
                 contacts.add(new User(Integer.parseInt(inMessage.getParams().get(0)), inMessage.getParams().get(1)));
@@ -129,5 +135,9 @@ public class MainController implements Initializable, MessageProcessor {
         if (networkService.getUser().equals(user)) {
             ChatApplication.getStage().setTitle("Easy Chat - " + user.getName());
         }
+    }
+
+    private void loadHistory() {
+        messageLog.readMessages().forEach((msg) -> chatArea.appendText(msg + System.lineSeparator()));
     }
 }
