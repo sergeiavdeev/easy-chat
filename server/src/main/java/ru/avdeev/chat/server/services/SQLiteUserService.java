@@ -24,7 +24,7 @@ public class SQLiteUserService implements UserService{
         connection.setAutoCommit(true);
     }
 
-    public static SQLiteUserService create() throws SQLException {
+    public static SQLiteUserService getInstance() throws SQLException {
 
         if (instance == null) {
             instance = new SQLiteUserService();
