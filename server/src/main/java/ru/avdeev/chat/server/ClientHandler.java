@@ -11,7 +11,7 @@ import java.net.Socket;
 
 import static java.lang.Thread.sleep;
 
-public class ClientHandler {
+public class ClientHandler implements Runnable {
 
     private DataInputStream inputStream;
     private DataOutputStream outputStream;
@@ -33,23 +33,6 @@ public class ClientHandler {
             e.printStackTrace();
         }
 
-    }
-
-    public void handle() {
-
-        new Thread(() -> {
-            if (!auth())return;
-            System.out.printf("Client auth success with name %s(%d)\n", user.getName(), user.getId());
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    String message = inputStream.readUTF();
-                    handleMessage(message);
-                } catch (IOException e) {
-                    server.removeClient(this);
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }).start();
     }
 
     public boolean auth() {
@@ -141,5 +124,21 @@ public class ClientHandler {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    @Override
+    public void run() {
+
+        if (!auth())return;
+        System.out.printf("Client auth success with name %s(%d)\n", user.getName(), user.getId());
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                String message = inputStream.readUTF();
+                handleMessage(message);
+            } catch (IOException e) {
+                server.removeClient(this);
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 }
