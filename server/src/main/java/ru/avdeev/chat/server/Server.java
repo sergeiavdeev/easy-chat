@@ -10,12 +10,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
 
     private final int port;
     private final List<ClientHandler> clients;
     private final UserService userService;
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public Server(int port, UserService userService) {
         this.port = port;
@@ -29,7 +32,7 @@ public class Server {
             System.out.printf("Server started on port %d\n", port);
             while (!Thread.currentThread().isInterrupted()) {
                 Socket socket = serverSocket.accept();
-                ClientHandler.createInstance(socket, this).handle();
+                executorService.execute(ClientHandler.createInstance(socket, this));
                 System.out.println("Client connected");
             }
         } catch (IOException e) {
