@@ -1,5 +1,7 @@
 package ru.avdeev.chat.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.avdeev.chat.commons.Message;
 import ru.avdeev.chat.commons.MessageType;
 import ru.avdeev.chat.commons.User;
@@ -17,6 +19,7 @@ public class ClientHandler implements Runnable {
     private DataOutputStream outputStream;
     private final Server server;
     private User user;
+    private final Logger logger = LogManager.getLogger();
 
     public static ClientHandler createInstance(Socket socket, Server server) {
         return new ClientHandler(socket, server);
@@ -39,12 +42,12 @@ public class ClientHandler implements Runnable {
 
         setTimeout();
 
-        System.out.println("Authorization");
+        logger.info("Authorization start...");
         boolean isAuth = false;
         while (true) {
             try {
                 String message = inputStream.readUTF();
-                System.out.println(message);
+                logger.trace("Received message {}", message);
                 Message inMessage = new Message(message);
                 if (inMessage.getType() == MessageType.REQUEST_AUTH) {
 
@@ -67,7 +70,8 @@ public class ClientHandler implements Runnable {
                     }
                 }
             } catch (IOException e) {
-                System.out.println("Unknown client disconnected");
+                logger.info("Unknown client disconnected");
+                logger.error(e);
                 Thread.currentThread().interrupt();
                 break;
             }
@@ -76,7 +80,8 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleMessage(String message) {
-        System.out.println(message);
+
+        logger.trace("Received message {}", message);
         Message inMessage = new Message(message);
         switch (inMessage.getType()) {
             case SEND_ALL:
@@ -130,7 +135,7 @@ public class ClientHandler implements Runnable {
     public void run() {
 
         if (!auth())return;
-        System.out.printf("Client auth success with name %s(%d)\n", user.getName(), user.getId());
+        logger.info("Client auth success with name {}({})", user.getName(), user.getId());
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 String message = inputStream.readUTF();

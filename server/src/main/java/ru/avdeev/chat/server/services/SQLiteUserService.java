@@ -1,5 +1,7 @@
 package ru.avdeev.chat.server.services;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.avdeev.chat.commons.User;
 import ru.avdeev.chat.commons.Utils;
 
@@ -11,6 +13,7 @@ public class SQLiteUserService implements UserService{
     private static final String DB_CONNECTION_STRING = "jdbc:sqlite:server/db/chat.db";
     private final Connection connection;
     private PreparedStatement preparedStatement;
+    private final Logger logger = LogManager.getLogger();
 
     private SQLiteUserService() throws SQLException {
 
@@ -37,12 +40,14 @@ public class SQLiteUserService implements UserService{
         try {
             preparedStatement = connection.prepareStatement(DB_SELECT_USER_BY_ID);
             preparedStatement.setInt(1, id);
+            logger.trace("Prepare select {}", DB_SELECT_USER_BY_ID);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new User(resultSet.getInt(1), resultSet.getString(2));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -52,12 +57,13 @@ public class SQLiteUserService implements UserService{
         try {
             preparedStatement = connection.prepareStatement(DB_SELECT_USER_BY_LOGIN);
             preparedStatement.setString(1, Utils.hash(login));
+            logger.trace("Prepare select {}", DB_SELECT_USER_BY_LOGIN);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new User(resultSet.getInt(1), resultSet.getString(2));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -69,13 +75,14 @@ public class SQLiteUserService implements UserService{
             preparedStatement.setString(1, Utils.hash(login));
             preparedStatement.setString(2, Utils.hash(password));
             preparedStatement.setString(3, user.getName());
+            logger.trace("Prepare insert {}", DB_ADD_USER);
             preparedStatement.execute();
             ResultSet rs = preparedStatement.getGeneratedKeys();
             if (rs.next()) {
                 return new User(rs.getInt(1), user.getName());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -92,12 +99,13 @@ public class SQLiteUserService implements UserService{
             preparedStatement = connection.prepareStatement(DB_SELECT_AUTH_USER);
             preparedStatement.setString(1, Utils.hash(login));
             preparedStatement.setString(2, Utils.hash(password));
+            logger.trace("Prepare select {}", DB_SELECT_AUTH_USER);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new User(resultSet.getInt(1), resultSet.getString(2));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
         return null;
     }
@@ -108,9 +116,10 @@ public class SQLiteUserService implements UserService{
             preparedStatement = connection.prepareStatement(DB_UPDATE_USER_NAME);
             preparedStatement.setInt(2, id);
             preparedStatement.setString(1, name);
+            logger.trace("Prepare update {}", DB_UPDATE_USER_NAME);
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -120,9 +129,10 @@ public class SQLiteUserService implements UserService{
             preparedStatement = connection.prepareStatement(DB_UPDATE_USER_PASSWORD);
             preparedStatement.setInt(2, id);
             preparedStatement.setString(1, Utils.hash(password));
+            logger.trace("Prepare update {}", DB_UPDATE_USER_PASSWORD);
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
