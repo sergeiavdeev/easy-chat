@@ -32,32 +32,4 @@ public class Application {
 
         new Server(port, userService).start();
     }
-
-    public static int[] getArrayAfterFour(int arr[]) {
-
-        int fIndex = -1;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == 4)fIndex = i;
-        }
-        if (fIndex == -1)throw new RuntimeException("Four not found");
-
-        int result[] = new int[arr.length - fIndex - 1];
-        for (int i = fIndex + 1, j = 0; i < arr.length; i++, j++) {
-            result[j] = arr[i];
-        }
-        return result;
-    }
-
-    public static boolean findOneFour(int arr[]) {
-        boolean one = false;
-        boolean four = false;
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == 1) one = true;
-            if (arr[i] == 4) four = true;
-            if (one || four) break;
-        }
-        return one || four;
-    }
-
-
 }
