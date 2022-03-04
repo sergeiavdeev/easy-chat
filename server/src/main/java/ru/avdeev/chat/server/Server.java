@@ -1,5 +1,7 @@
 package ru.avdeev.chat.server;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.avdeev.chat.commons.Message;
 import ru.avdeev.chat.commons.MessageType;
 import ru.avdeev.chat.commons.User;
@@ -19,6 +21,7 @@ public class Server {
     private final List<ClientHandler> clients;
     private final UserService userService;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private final Logger logger = LogManager.getLogger();
 
     public Server(int port, UserService userService) {
         this.port = port;
@@ -29,14 +32,14 @@ public class Server {
     public void start() {
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.printf("Server started on port %d\n", port);
+            logger.info("Server started on port {}", port);
             while (!Thread.currentThread().isInterrupted()) {
                 Socket socket = serverSocket.accept();
                 executorService.execute(ClientHandler.createInstance(socket, this));
-                System.out.println("Client connected");
+                logger.info("Client connected");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -63,7 +66,7 @@ public class Server {
 
     public void removeClient(ClientHandler client) {
         clients.remove(client);
-        System.out.printf("Client %s disconnected\n", client.getUser().getName());
+        logger.info("Client {} disconnected", client.getUser().getName());
         User disconnectedUser = client.getUser();
         if (!isUserOnline(disconnectedUser)) {
             sendUserOffline(disconnectedUser);
